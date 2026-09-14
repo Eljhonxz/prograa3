@@ -1,0 +1,63 @@
+
+package arreglope;
+import java.util.Arrays;
+public class Arreglope {
+public static void main(String[] args) {
+int [] o = {2,3,9,6,-6,-4,0};
+int [] neg = new int [o.length];
+int [] pos = new int [o.length];
+int [] a = new int [o.length];
+
+
+int nega = 0;
+int posi = 0;
+int ceros = 0;
+
+
+for (int i = 0; i<o.length; i++){
+if(o[i]< 0){
+    neg[nega] = o[i];
+    nega++;
+
+}
+if(o[i]>0){
+    pos[posi] = o[i];
+    posi++;
+    
+}
+if(o[i]==0){
+    a[ceros]= o[i];
+    ceros++;
+}
+}
+
+int [] negxact = Arrays.copyOf(neg,nega);
+int [] posexact = Arrays.copyOf(pos,posi);
+int [] cerosexact = Arrays.copyOf(a,ceros);
+
+    System.out.print(" Arreglo neg {");
+    for(int i = 0; i<negxact.length; i++){
+        System.out.print(negxact[i] + " ");    
+    }
+    System.out.println("}");
+
+        System.out.print(" Arreglo pos {");
+    for(int i = 0; i<posexact.length; i++){
+        System.out.print(posexact[i] + " ");    
+    }
+    System.out.println("}");
+    
+    
+    System.out.print("Arreglo 0 {");
+      for(int i = 0; i<cerosexact.length; i++){
+        System.out.print(cerosexact[i] + " ");    
+    }
+    System.out.print("}");
+    
+    
+    
+
+
+    }
+    
+}
