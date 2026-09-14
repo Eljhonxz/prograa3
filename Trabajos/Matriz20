@@ -1,0 +1,38 @@
+
+package alfilraro;
+public class Alfilraro {
+public static void main(String[] args) {
+int [][] Alfol = new int [10][10];
+
+
+for (int i = 0; i<Alfol.length; i++){
+    for (int j = 0; j<Alfol[i].length; j++){
+        if(i<=j){
+            Alfol[i][j] = 0;
+        }
+        
+        else{
+            Alfol[i][j] = 1;
+        }
+    }
+}
+
+
+    System.out.println("Matriz 10x10: ");
+    for (int i = 0; i < Alfol.length; i++) {
+        for (int j = 0; j < Alfol[i].length; j++) {
+            System.out.print (Alfol[i][j] + "\t");
+            
+        }
+        System.out.println();
+        
+    }
+    
+    
+    
+    
+    
+    
+    }
+    
+}
