@@ -1,0 +1,40 @@
+
+package matrizsumimen;
+public class Matrizsumimen {
+public static void main(String[] args) {
+
+int [][] matriz = { //[] Uno representa las filas y el otro las columnas
+{1,5,9},
+{2,6,8},
+{4,5,6} 
+};
+
+//Suma de fila
+
+for (int i = 0; i<matriz.length; i++){  //i para la fila
+    int sumafil= 0;     // se puso adentro para que se actualice
+    for( int j = 0; j<matriz[i].length; j++){   // j para la columna
+// matriz.length es el numero de filas
+// matriz[i].length Numero de columnas en la fila i 
+sumafil += matriz[i][j];
+        
+    }
+    System.out.println("Suma de la fila " + (i+1) + ":" + sumafil);
+}
+// suma columna
+for(int j = 0; j<matriz[0].length; j++){
+    int sumacolum = 0;
+    
+for (int i = 0; i<matriz.length; i++){
+sumacolum += matriz[i][j];    
+} 
+
+    System.out.println("Suma de la columna " + (j+1) + ": " + sumacolum);
+    
+}
+    
+    
+    
+    }
+    
+}
