@@ -1,0 +1,66 @@
+package laulti;
+
+import java.util.Scanner;
+public class Laulti {
+    public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);
+
+        int[][] cosechadelaño = new int[12][1];
+
+        String[] meses = {
+            "Enero","Febrero","Marzo","Abril",
+            "Mayo","Junio","Julio","Agosto",
+            "Septiembre","Octubre","Noviembre","Diciembre"
+        };
+
+        int suma = 0;
+
+        System.out.println("Ingresa las toneladas de cada mes:");
+
+        for (int i = 0; i < cosechadelaño.length; i++) {
+            for (int j = 0; j < cosechadelaño[i].length; j++) {
+                System.out.print(meses[i] + ": ");
+                cosechadelaño[i][j] = teclado.nextInt();
+            }
+        }
+
+        for (int i = 0; i < cosechadelaño.length; i++) {
+            for (int j = 0; j < cosechadelaño[i].length; j++) {
+                suma += cosechadelaño[i][j];
+            }
+        }
+
+        double promedio = (double) suma / cosechadelaño.length;
+
+        int superior = 0;
+        int inferior = 0;
+
+        int mayor = cosechadelaño[0][0];
+        int filamayor = 0;
+
+        for (int i = 0; i < cosechadelaño.length; i++) {
+
+            if (cosechadelaño[i][0] > promedio) {
+                superior++;
+            }
+
+            if (cosechadelaño[i][0] < promedio) {
+                inferior++;
+            }
+
+            if (cosechadelaño[i][0] > mayor) {
+                mayor = cosechadelaño[i][0];
+                filamayor = i;
+            }
+        }
+
+        System.out.println("\n===== RESULTADOS =====");
+        System.out.println("Promedio anual: " + promedio);
+        System.out.println("Meses superiores al promedio: " + superior);
+        System.out.println("Meses inferiores al promedio: " + inferior);
+        System.out.println("Mes de mayor produccion: " + meses[filamayor]);
+        System.out.println("Toneladas producidas: " + mayor);
+
+    }
+
+}
