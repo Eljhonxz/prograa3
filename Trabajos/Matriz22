@@ -1,0 +1,68 @@
+//Visualizador de visualizaciones la secuela
+package rango;
+import java.util.Scanner;
+public class Rango {
+public static void main(String[] args) {
+Scanner teclado = new Scanner (System.in);
+System.out.println("Ingrese el numero de filas: ");
+int p = 0;
+p = teclado.nextInt();
+System.out.println("Ingrese el numero de columnas: ");
+int e = 0;
+e = teclado.nextInt();
+
+int [][] camaleon = new int [p][e];
+
+
+System.out.println("Ingresar los " + (p*e) + " numeros");
+for (int i = 0; i < p; i++) {
+    for (int j = 0; j <e; j++) {
+        System.out.println("La matriz [" + i + "][" + j + "]: " );
+        camaleon[i][j] = teclado.nextInt();
+            
+        }
+        
+    }
+
+    System.out.println("Rango/Matriz puesto: ");
+    for (int i = 0; i < p; i++) {
+    for (int j = 0; j < e; j++) {
+        System.out.print(camaleon[i][j] + "\t");
+        }
+        System.out.println(); 
+    }
+    
+    int mayor = camaleon[0][0];
+    int menor = camaleon[0][0];
+    int filamayor = 0, colummayor = 0;
+    int filamen = 0, colummen = 0;
+    
+    for (int i = 0; i < p; i++) {
+    for (int j = 0; j < e; j++) {
+        if (camaleon[i][j] > mayor){
+            mayor =  camaleon [i][j];
+            filamayor = i;
+            colummayor = j;
+        }
+        
+        if (camaleon[i][j] < menor){
+            menor = camaleon[i][j];
+        filamen = i;
+        colummen = j;
+        }
+        }
+        
+    }
+    // resultados
+    System.out.println("Mayor:  " + mayor + " en la posición[" + filamayor + "][" + colummayor + "]");
+    System.out.println("Menor:  " + menor + " en la posición[" + filamen + "][" + colummen + "]");
+    
+    
+    
+    
+
+        
+        
+    }
+    
+}
