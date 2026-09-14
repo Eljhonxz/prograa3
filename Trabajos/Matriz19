@@ -1,0 +1,42 @@
+
+package matrizalfil;
+public class Matrizalfil {
+public static void main(String[] args) {
+int n = 5;    
+int m = 5;
+
+int [][] Alfil = new int [n][m];   // Puedo asignar asi tambien
+
+
+for (int i = 0; i<n; i++){
+    for (int j = 0; j<m; j++){
+if (i==j){
+    Alfil[i][j]= 1;
+}
+else{
+    Alfil[i][j]=0;
+}             
+    }
+}
+
+System.out.println("El alfil se mueve así " + n + "x" + m + ":");
+for(int i = 0; i<n; i++){
+    for(int j = 0; j<m; j++){
+        System.out.print(Alfil[i][j] + "\t");   // La \t no es igual a \n
+        //Eso es para que se vea como tabla
+    }
+    System.out.println();
+}
+
+
+
+
+
+
+
+
+
+
+    }
+    
+}
