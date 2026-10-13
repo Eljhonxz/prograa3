@@ -1,0 +1,258 @@
+package cola10_3;
+import java.util.Random;
+
+// Clase simple para representar el carrito de compra
+class Carrito {
+    int id;
+
+    public Carrito(int id) {
+        this.id = id;
+    }
+}
+
+// Clase Cliente con sus tiempos de compra y pago
+class Cliente {
+    int id;
+    Carrito carrito;
+    int tiempoCompraRestante;
+    int tiempoPagoRestante;
+
+    public Cliente(int id) {
+        this.id = id;
+        this.tiempoCompraRestante = new Random().nextInt(5) + 1; // Entre 1 y 5 tics
+        this.tiempoPagoRestante = new Random().nextInt(4) + 2;  // Entre 2 y 5 tics
+    }
+}
+
+// Cola simple de Carritos usando un arreglo circular
+class ColaCarrito {
+    private Carrito[] elementos;
+    private int frente;
+    private int fin;
+    private int cantidad;
+    private static final int MAX = 100;
+
+    public ColaCarrito() {
+        elementos = new Carrito[MAX];
+        frente = 0;
+        fin = 0;
+        cantidad = 0;
+    }
+
+    public void encolar(Carrito c) {
+        if (cantidad < MAX) {
+            elementos[fin] = c;
+            fin = (fin + 1) % MAX;
+            cantidad++;
+        }
+    }
+
+    public Carrito desencolar() {
+        if (cantidad == 0) return null;
+        Carrito c = elementos[frente];
+        frente = (frente + 1) % MAX;
+        cantidad--;
+        return c;
+    }
+
+    public boolean estaVacia() {
+        return cantidad == 0;
+    }
+
+    public int tamaño() {
+        return cantidad;
+    }
+}
+
+// Cola simple de Clientes usando un arreglo circular
+class ColaCliente {
+    private Cliente[] elementos;
+    private int frente;
+    private int fin;
+    private int cantidad;
+    private static final int MAX = 100;
+
+    public ColaCliente() {
+        elementos = new Cliente[MAX];
+        frente = 0;
+        fin = 0;
+        cantidad = 0;
+    }
+
+    public void encolar(Cliente c) {
+        if (cantidad < MAX) {
+            elementos[fin] = c;
+            fin = (fin + 1) % MAX;
+            cantidad++;
+        }
+    }
+
+    public Cliente desencolar() {
+        if (cantidad == 0) return null;
+        Cliente c = elementos[frente];
+        frente = (frente + 1) % MAX;
+        cantidad--;
+        return c;
+    }
+
+    public boolean estaVacia() {
+        return cantidad == 0;
+    }
+
+    public int tamaño() {
+        return cantidad;
+    }
+}
+
+// Clase Caja que contiene su propia cola de clientes
+class Caja {
+    int id;
+    ColaCliente colaClientes;
+    boolean ocupada;
+    Cliente clienteActual;
+
+    public Caja(int id) {
+        this.id = id;
+        this.colaClientes = new ColaCliente();
+        this.ocupada = false;
+        this.clienteActual = null;
+    }
+}
+
+public class Cola10_3 {
+
+    public static void main(String[] args) {
+        // Inicializo los recursos del supermercado
+        ColaCarrito carritosDisponibles = new ColaCarrito();
+        for (int i = 1; i <= 25; i++) {
+            carritosDisponibles.encolar(new Carrito(i));
+        }
+
+        // Creo las 3 cajas de pago
+        Caja[] cajas = new Caja[3];
+        for (int i = 0; i < 3; i++) {
+            cajas[i] = new Caja(i + 1);
+        }
+
+        // Colas para manejar el flujo de clientes
+        ColaCliente clientesEsperandoCarrito = new ColaCliente();
+        
+        // Arreglo de clientes que están comprando
+        Cliente[] clientesComprando = new Cliente[1000];
+        int numComprando = 0;
+
+        Random random = new Random();
+        int contadorClientes = 1;
+
+        System.out.println("--- Iniciando simulación del supermercado ---");
+
+        // Simulo el paso del tiempo (100 tics)
+        for (int tiempo = 1; tiempo <= 100; tiempo++) {
+
+            // 1. LLEGADA DE CLIENTES
+            if (random.nextDouble() < 0.6) {
+                Cliente nuevoCliente = new Cliente(contadorClientes);
+                contadorClientes++;
+
+                if (carritosDisponibles.estaVacia()) {
+                    // Si no hay carritos, el cliente espera en la entrada
+                    clientesEsperandoCarrito.encolar(nuevoCliente);
+                    System.out.println("[Tiempo " + tiempo + "] Cliente " + nuevoCliente.id + " espera por falta de carritos.");
+                } else {
+                    // Si hay carrito, lo toma y comienza a comprar
+                    nuevoCliente.carrito = carritosDisponibles.desencolar();
+                    clientesComprando[numComprando] = nuevoCliente;
+                    numComprando++;
+                    System.out.println("[Tiempo " + tiempo + "] Cliente " + nuevoCliente.id + " toma el carrito " + nuevoCliente.carrito.id + " y empieza a comprar.");
+                }
+            }
+
+            // 2. ASIGNACIÓN DE CARRITOS A QUIENES ESPERAN
+            while (!clientesEsperandoCarrito.estaVacia() && !carritosDisponibles.estaVacia()) {
+                Cliente clienteEnEspera = clientesEsperandoCarrito.desencolar();
+                clienteEnEspera.carrito = carritosDisponibles.desencolar();
+                clientesComprando[numComprando] = clienteEnEspera;
+                numComprando++;
+                System.out.println("[Tiempo " + tiempo + "] Cliente " + clienteEnEspera.id + " recibe el carrito " + clienteEnEspera.carrito.id + " y empieza a comprar.");
+            }
+
+            // 3. PROCESO DE COMPRA
+            Cliente[] clientesQueTerminanCompra = new Cliente[1000];
+            int numTerminan = 0;
+
+            for (int i = 0; i < numComprando; i++) {
+                clientesComprando[i].tiempoCompraRestante--;
+                if (clientesComprando[i].tiempoCompraRestante <= 0) {
+                    clientesQueTerminanCompra[numTerminan] = clientesComprando[i];
+                    numTerminan++;
+                }
+            }
+
+            // 4. CLIENTES QUE TERMINAN COMPRA Y ELIGEN CAJA
+            for (int t = 0; t < numTerminan; t++) {
+                Cliente c = clientesQueTerminanCompra[t];
+
+                // Elimino al cliente del arreglo clientesComprando
+                for (int i = 0; i < numComprando; i++) {
+                    if (clientesComprando[i] == c) {
+                        // Muevo todos los siguientes un lugar a la izquierda
+                        for (int j = i; j < numComprando - 1; j++) {
+                            clientesComprando[j] = clientesComprando[j + 1];
+                        }
+                        numComprando--;
+                        break;
+                    }
+                }
+
+                // Busco la caja con menos gente en su cola
+                Caja cajaElegida = cajas[0];
+                for (int i = 0; i < 3; i++) {
+                    if (cajas[i].colaClientes.tamaño() < cajaElegida.colaClientes.tamaño()) {
+                        cajaElegida = cajas[i];
+                    }
+                }
+
+                cajaElegida.colaClientes.encolar(c);
+                System.out.println("[Tiempo " + tiempo + "] Cliente " + c.id + " termina de comprar y se pone en la cola de la Caja " + cajaElegida.id + " (Tamaño cola: " + cajaElegida.colaClientes.tamaño() + ").");
+            }
+
+            // 5. PROCESO DE PAGO EN LAS CAJAS
+            for (int i = 0; i < 3; i++) {
+                Caja caja = cajas[i];
+
+                if (!caja.ocupada && !caja.colaClientes.estaVacia()) {
+                    // Si la caja está libre, atiendo al siguiente cliente
+                    caja.clienteActual = caja.colaClientes.desencolar();
+                    caja.ocupada = true;
+                    System.out.println("[Tiempo " + tiempo + "] Caja " + caja.id + " empieza a atender al Cliente " + caja.clienteActual.id + ".");
+                }
+
+                if (caja.ocupada) {
+                    // Si está ocupada, avanzo su tiempo de pago
+                    caja.clienteActual.tiempoPagoRestante--;
+
+                    if (caja.clienteActual.tiempoPagoRestante <= 0) {
+                        // El cliente termina de pagar
+                        System.out.println("[Tiempo " + tiempo + "] Cliente " + caja.clienteActual.id + " termina de pagar en Caja " + caja.id + ". Carrito " + caja.clienteActual.carrito.id + " liberado.");
+
+                        // Libero el carrito
+                        carritosDisponibles.encolar(caja.clienteActual.carrito);
+
+                        // Libero la caja
+                        caja.ocupada = false;
+                        caja.clienteActual = null;
+                    }
+                }
+            }
+        } // Fin del bucle de tiempo
+
+        // Muestro un resumen del estado final
+        System.out.println("\n--- Resumen final de la simulación ---");
+        System.out.println("Carritos disponibles al final: " + carritosDisponibles.tamaño());
+        System.out.println("Clientes esperando carrito: " + clientesEsperandoCarrito.tamaño());
+        System.out.println("Clientes aún comprando: " + numComprando);
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Caja " + cajas[i].id + " -> Ocupada: " + cajas[i].ocupada + " | Clientes en cola: " + cajas[i].colaClientes.tamaño());
+        }
+    }
+}
