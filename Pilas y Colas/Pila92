@@ -1,0 +1,82 @@
+package pila9.pkg2;
+
+// Clase Pila básica: usa un arreglo de caracteres y un tope
+class Pila {
+    private char[] elementos;
+    private int tope;
+    private static final int MAX = 1000;
+
+    public Pila() {
+        elementos = new char[MAX];
+        tope = 0;
+    }
+
+    public void push(char elemento) {
+        if (tope < MAX) {
+            elementos[tope] = elemento;
+            tope++;
+        }
+    }
+
+    public char pop() {
+        tope--;
+        return elementos[tope];
+    }
+
+    public boolean isEmpty() {
+        return tope == 0;
+    }
+}
+
+public class Pila92 {
+
+    // Método que determina si la secuencia tiene la forma X & Y
+    public static boolean esSecuenciaInversa(String entrada) {
+        // Busco la posición del separador
+        int posicionAmpersand = entrada.indexOf('&');
+
+        // Si no hay separador, no es válida
+        if (posicionAmpersand == -1) {
+            return false;
+        }
+
+        // Separo la cadena en X (antes del &) e Y (después del &)
+        String x = entrada.substring(0, posicionAmpersand);
+        String y = entrada.substring(posicionAmpersand + 1);
+
+        // Si no miden lo mismo, no pueden ser inversas
+        if (x.length() != y.length()) {
+            return false;
+        }
+
+        // Creo una pila para guardar los caracteres de X
+        Pila pila = new Pila();
+
+        // Meto todos los caracteres de X en la pila
+        for (int i = 0; i < x.length(); i++) {
+            pila.push(x.charAt(i));
+        }
+
+        // Saco de la pila y comparo con Y
+        for (int i = 0; i < y.length(); i++) {
+            char caracterDePila = pila.pop();
+
+            // Si no coinciden, no es inversa
+            if (y.charAt(i) != caracterDePila) {
+                return false;
+            }
+        }
+
+        // Si todo coincidió, la secuencia es correcta
+        return true;
+    }
+
+    public static void main(String[] args) {
+        // Casos de prueba
+        System.out.println("abc&cba -> " + esSecuenciaInversa("abc&cba"));
+        System.out.println("hola&aloh -> " + esSecuenciaInversa("hola&aloh"));
+        System.out.println("abc&abc -> " + esSecuenciaInversa("abc&abc"));
+        System.out.println("abc&cb -> " + esSecuenciaInversa("abc&cb"));
+        System.out.println("programacion&noicamargorp -> " + esSecuenciaInversa("programacion&noicamargorp"));
+    }
+}
