@@ -1,0 +1,136 @@
+package pila9_6;
+import java.util.Scanner;
+
+// Clase Pila básica: usa un arreglo de caracteres y un tope
+class Pila {
+    private char[] elementos;
+    private int tope;
+    private static final int MAX = 10000; // tamaño máximo para una línea
+
+    public Pila() {
+        elementos = new char[MAX];
+        tope = 0;
+    }
+
+    public void push(char elemento) {
+        if (tope < MAX) {
+            elementos[tope] = elemento;
+            tope++;
+        }
+    }
+
+    public char pop() {
+        tope--;
+        return elementos[tope];
+    }
+
+    public boolean isEmpty() {
+        return tope == 0;
+    }
+}
+
+// Clase Nodo para la lista enlazada circular (ahora solo guarda char)
+class Nodo {
+    char dato;
+    Nodo siguiente;
+
+    public Nodo(char dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+}
+
+// Clase Lista Enlazada Circular (sin genéricos, solo char)
+class ListaCircular {
+    private Nodo cabeza;
+    private Nodo cola;
+
+    public ListaCircular() {
+        this.cabeza = null;
+        this.cola = null;
+    }
+
+    // Método para insertar un elemento al final de la lista
+    public void insertarAlFinal(char dato) {
+        Nodo nuevoNodo = new Nodo(dato);
+
+        if (cabeza == null) {
+            // Si la lista está vacía, el nuevo nodo es la cabeza y la cola, y se apunta a sí mismo
+            cabeza = nuevoNodo;
+            cola = nuevoNodo;
+            nuevoNodo.siguiente = cabeza;
+        } else {
+            // Si ya hay elementos, el último nodo apunta al nuevo, y el nuevo apunta a la cabeza
+            cola.siguiente = nuevoNodo;
+            nuevoNodo.siguiente = cabeza;
+            cola = nuevoNodo; // Actualizo la cola
+        }
+    }
+
+    public Nodo getCabeza() {
+        return cabeza;
+    }
+
+    public boolean estaVacia() {
+        return cabeza == null;
+    }
+}
+
+public class Pila9_6 {
+
+    public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);
+        System.out.println("--- Detector de Palíndromos ---");
+        System.out.println("Ingrese una frase (o presione Enter sin escribir nada para salir):");
+
+        // Bucle para leer líneas continuamente
+        while (true) {
+            String linea = teclado.nextLine();
+
+            // Condición de salida: línea vacía
+            if (linea.isEmpty()) {
+                break;
+            }
+
+            // Creo mis estructuras para la línea actual
+            Pila pila = new Pila();
+            ListaCircular lista = new ListaCircular();
+
+            // Recorro la línea carácter por carácter
+            for (int i = 0; i < linea.length(); i++) {
+                char c = linea.charAt(i);
+                pila.push(c);               // Se apila (orden inverso)
+                lista.insertarAlFinal(c);   // Se inserta al final (orden original)
+            }
+
+            // Variable para asumir que es palíndromo hasta que se demuestre lo contrario
+            boolean esPalindromo = true;
+
+            // Inicio el recorrido desde la cabeza de la lista circular
+            Nodo actual = lista.getCabeza();
+
+            // Comparo los caracteres extrayendo de la pila y recorriendo la lista
+            while (!pila.isEmpty()) {
+                char charDePila = pila.pop();       // Extrae del final hacia el principio
+                char charDeLista = actual.dato;    // Recorre del principio hacia el final
+
+                if (charDePila != charDeLista) {
+                    esPalindromo = false;
+                    break; // Si encuentro una diferencia, no es palíndromo
+                }
+
+                actual = actual.siguiente; // Avanzo en la lista circular
+            }
+
+            // Muestro el resultado por pantalla
+            if (esPalindromo) {
+                System.out.println("-> \"" + linea + "\" SÍ es un palíndromo.");
+            } else {
+                System.out.println("-> \"" + linea + "\" NO es un palíndromo.");
+            }
+        }
+
+        System.out.println("Programa finalizado.");
+        teclado.close();
+    }
+}
