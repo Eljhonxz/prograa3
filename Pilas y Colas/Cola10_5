@@ -1,0 +1,191 @@
+package cola10_5;
+import java.util.Scanner;
+
+// Nodo para la lista enlazada de repartidores
+class NodoRepartidor {
+    int ssn;
+    String nombre;
+    int diasTrabajados;
+    NodoRepartidor siguiente;
+
+    public NodoRepartidor(int ssn, String nombre, int diasTrabajados) {
+        this.ssn = ssn;
+        this.nombre = nombre;
+        this.diasTrabajados = diasTrabajados;
+        this.siguiente = null;
+    }
+}
+
+// Lista enlazada ordenada por SSN
+class ListaRepartidores {
+    private NodoRepartidor cabeza;
+
+    public ListaRepartidores() {
+        this.cabeza = null;
+    }
+
+    // Busca si un SSN ya existe. Devuelve true o false.
+    public boolean existe(int ssn) {
+        NodoRepartidor actual = cabeza;
+        while (actual != null) {
+            if (actual.ssn == ssn) {
+                return true;
+            }
+            actual = actual.siguiente;
+        }
+        return false;
+    }
+
+    // Incrementa los días trabajados de un repartidor existente
+    public void incrementarDias(int ssn) {
+        NodoRepartidor actual = cabeza;
+        while (actual != null) {
+            if (actual.ssn == ssn) {
+                actual.diasTrabajados++;
+                System.out.println("-> Repartidor " + actual.nombre + " (SSN: " + ssn + ") actualizado. Días: " + actual.diasTrabajados);
+                return;
+            }
+            actual = actual.siguiente;
+        }
+    }
+
+    // Inserta un nuevo repartidor manteniendo el orden por SSN
+    public void insertarOrdenado(int ssn, String nombre) {
+        NodoRepartidor nuevo = new NodoRepartidor(ssn, nombre, 1);
+        NodoRepartidor actual = cabeza;
+        NodoRepartidor anterior = null;
+
+        // Busco la posición correcta
+        while (actual != null && actual.ssn < ssn) {
+            anterior = actual;
+            actual = actual.siguiente;
+        }
+
+        // Inserto el nodo
+        if (anterior == null) {
+            nuevo.siguiente = cabeza;
+            cabeza = nuevo;
+        } else {
+            nuevo.siguiente = actual;
+            anterior.siguiente = nuevo;
+        }
+        System.out.println("-> Nuevo repartidor " + nombre + " (SSN: " + ssn + ") agregado a la lista.");
+    }
+
+    // Muestra todos los repartidores
+    public void mostrar() {
+        NodoRepartidor actual = cabeza;
+        System.out.println("\n--- Registro Histórico de Repartidores ---");
+        if (actual == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+        while (actual != null) {
+            System.out.println("SSN: " + actual.ssn + " | Nombre: " + actual.nombre + " | Días Trabajados: " + actual.diasTrabajados);
+            actual = actual.siguiente;
+        }
+    }
+}
+
+// Nodo para la cola de reportes diarios
+class NodoCola {
+    int ssn;
+    String entidad;
+    NodoCola siguiente;
+
+    public NodoCola(int ssn, String entidad) {
+        this.ssn = ssn;
+        this.entidad = entidad;
+        this.siguiente = null;
+    }
+}
+
+// Cola simple con nodos enlazados
+class ColaReportes {
+    private NodoCola frente;
+    private NodoCola fin;
+
+    public ColaReportes() {
+        this.frente = null;
+        this.fin = null;
+    }
+
+    public void encolar(int ssn, String entidad) {
+        NodoCola nuevo = new NodoCola(ssn, entidad);
+        if (fin == null) {
+            frente = nuevo;
+            fin = nuevo;
+        } else {
+            fin.siguiente = nuevo;
+            fin = nuevo;
+        }
+    }
+
+    public NodoCola desencolar() {
+        if (frente == null) return null;
+        NodoCola nodo = frente;
+        frente = frente.siguiente;
+        if (frente == null) {
+            fin = null;
+        }
+        return nodo;
+    }
+
+    public boolean estaVacia() {
+        return frente == null;
+    }
+}
+
+public class Cola10_5 {
+
+    public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);
+
+        // Creo la lista y la cola
+        ListaRepartidores lista = new ListaRepartidores();
+        ColaReportes cola = new ColaReportes();
+
+        System.out.println("--- Registro de Trabajo Diario ---");
+        System.out.println("Ingrese los datos de los repartidores.");
+        System.out.println("Para terminar de ingresar datos, escriba 0 en el SSN.");
+
+        // 1. Lleno la cola con los reportes del día
+        while (true) {
+            System.out.print("\nIngrese el SSN del repartidor (0 para salir): ");
+            int ssn = teclado.nextInt();
+            teclado.nextLine(); // Limpio el buffer
+
+            if (ssn == 0) {
+                break;
+            }
+
+            System.out.print("Ingrese la entidad anunciada: ");
+            String entidad = teclado.nextLine();
+
+            cola.encolar(ssn, entidad);
+            System.out.println("-> Reporte guardado en la cola.");
+        }
+
+        // 2. Proceso la cola y actualizo la lista
+        System.out.println("\n--- Procesando cola y actualizando lista ---");
+        while (!cola.estaVacia()) {
+            NodoCola reporte = cola.desencolar();
+
+            if (lista.existe(reporte.ssn)) {
+                // Si ya existe, solo sumo un día
+                lista.incrementarDias(reporte.ssn);
+            } else {
+                // Si no existe, pido el nombre y lo inserto
+                System.out.print("El SSN " + reporte.ssn + " no está registrado. Ingrese el nombre: ");
+                String nombre = teclado.nextLine();
+                lista.insertarOrdenado(reporte.ssn, nombre);
+            }
+        }
+
+        // 3. Muestro el resultado final
+        lista.mostrar();
+
+        teclado.close();
+        System.out.println("\n--- Programa finalizado ---");
+    }
+}
