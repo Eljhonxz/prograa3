@@ -1,0 +1,86 @@
+package pila9_3;
+
+// Clase Pila básica: usa un arreglo de caracteres y un tope
+class Pila {
+    private char[] elementos;
+    private int tope;
+
+    public Pila() {
+        elementos = new char[100]; // tamaño máximo para guardar símbolos
+        tope = 0;
+    }
+
+    public void push(char c) {
+        if (tope < elementos.length) {
+            elementos[tope] = c;
+            tope++;
+        }
+    }
+
+    public char pop() {
+        if (isEmpty()) {
+            return '\0'; // carácter nulo si está vacía
+        }
+        tope--;
+        return elementos[tope];
+    }
+
+    public boolean isEmpty() {
+        return tope == 0;
+    }
+}
+
+public class Pila9_3 {
+
+    // Método que verifica el equilibrio de paréntesis, llaves y corchetes
+    public static boolean estaBalanceada(String expresion) {
+        Pila pilaSimbolos = new Pila();
+
+        // Recorro la expresión carácter por carácter
+        for (int i = 0; i < expresion.length(); i++) {
+            char c = expresion.charAt(i);
+
+            // Si es un símbolo de apertura, lo meto en la pila
+            if (c == '(' || c == '[' || c == '{') {
+                pilaSimbolos.push(c);
+            }
+            // Si es un símbolo de cierre, verifico su correspondencia
+            else if (c == ')' || c == ']' || c == '}') {
+                // Si la pila está vacía, hay un cierre sin apertura
+                if (pilaSimbolos.isEmpty()) {
+                    return false;
+                }
+
+                // Saco el último símbolo de apertura guardado
+                char tope = pilaSimbolos.pop();
+
+                // Compruebo que el cierre coincida con su apertura
+                if ((c == ')' && tope != '(') ||
+                    (c == ']' && tope != '[') ||
+                    (c == '}' && tope != '{')) {
+                    return false;
+                }
+            }
+        }
+
+        // Al final, la pila debe estar vacía
+        return pilaSimbolos.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        String expresion1 = "((a+b)*5) - 7";
+        String expresion2 = "2*[(a+b)/2.5 + x - 7*y";
+        String expresion3 = "{a + [b * (c - d)]}";
+
+        System.out.println("Expresión 1: " + expresion1);
+        System.out.println("¿Está balanceada? " + estaBalanceada(expresion1));
+
+        System.out.println();
+        System.out.println("Expresión 2: " + expresion2);
+        System.out.println("¿Está balanceada? " + estaBalanceada(expresion2));
+
+        System.out.println();
+        System.out.println("Expresión 3: " + expresion3);
+        System.out.println("¿Está balanceada? " + estaBalanceada(expresion3));
+    }
+}
