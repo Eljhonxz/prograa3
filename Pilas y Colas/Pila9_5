@@ -1,0 +1,122 @@
+package pila9_5;
+import java.util.Scanner;
+
+// Clase Pila básica: usa un arreglo de enteros y un tope
+class Pila {
+    private int[] elementos;
+    private int tope;
+    private static final int MAX = 100; // tamaño máximo de la pila
+
+    public Pila() {
+        elementos = new int[MAX];
+        tope = 0;
+    }
+
+    public void push(int elemento) {
+        if (tope < MAX) {
+            elementos[tope] = elemento;
+            tope++;
+        }
+    }
+
+    public int pop() {
+        tope--;
+        return elementos[tope];
+    }
+
+    public boolean isEmpty() {
+        return tope == 0;
+    }
+
+    // Método para borrar todos los elementos de la pila
+    public void clear() {
+        tope = 0;
+    }
+}
+
+public class Pila9_5 {
+
+    public static void main(String[] args) {
+        // Creo un arreglo con las 5 pilas
+        Pila[] pilas = new Pila[5];
+        
+        // Inicializo cada pila vacía
+        for (int i = 0; i < 5; i++) {
+            pilas[i] = new Pila();
+        }
+
+        // Creo un objeto Scanner para leer los datos por teclado
+        Scanner teclado = new Scanner(System.in);
+        
+        System.out.println("--- Ingreso de datos ---");
+        System.out.println("Ingrese tríos de enteros (i, j, k). Ingrese 0 en i para terminar.");
+
+        // Bucle infinito que se romperá cuando i sea 0
+        while (true) {
+            System.out.print("Ingrese i: ");
+            int i = teclado.nextInt();
+            
+            // Si i es cero, termino el proceso de entrada
+            if (i == 0) {
+                break;
+            }
+
+            System.out.print("Ingrese j: ");
+            int j = teclado.nextInt();
+            
+            System.out.print("Ingrese k: ");
+            int k = teclado.nextInt();
+
+            // Calculo el índice de la pila (1 a 5)
+            int indicePila = Math.abs(i) - 1;
+
+            // Verifico que el índice esté dentro del rango permitido (0 a 4)
+            if (indicePila >= 0 && indicePila < 5) {
+                // Evalúo el valor de k para decidir la acción
+                if (k == -1) {
+                    // Si k es -1, borro todos los elementos de la pila
+                    pilas[indicePila].clear();
+                    System.out.println("Pila P" + Math.abs(i) + " vaciada por completo.");
+                } else if (k == 0) {
+                    // Si k es 0, realizo la operación estándar
+                    if (i > 0) {
+                        // Si i es positivo, inserto j en la pila
+                        pilas[indicePila].push(j);
+                        System.out.println("Insertado " + j + " en P" + Math.abs(i));
+                    } else {
+                        // Si i es negativo, elimino el elemento superior de la pila
+                        if (pilas[indicePila].isEmpty()) {
+                            System.out.println("La pila P" + Math.abs(i) + " está vacía, no se pudo eliminar.");
+                        } else {
+                            int eliminado = pilas[indicePila].pop();
+                            System.out.println("Eliminado " + eliminado + " de P" + Math.abs(i));
+                        }
+                    }
+                } else {
+                    // Si k toma otro valor, muestro un mensaje de error
+                    System.out.println("Error: el valor de k debe ser -1 o 0.");
+                }
+            } else {
+                System.out.println("Error: el valor de i debe cumplir 1 <= |i| <= 5.");
+            }
+        }
+
+        // Al terminar, muestro el contenido de cada una de las 5 pilas
+        System.out.println("\n--- Contenido final de las pilas ---");
+        for (int m = 0; m < 5; m++) {
+            System.out.print("Pila P" + (m + 1) + ": ");
+            
+            if (pilas[m].isEmpty()) {
+                System.out.print("[Vacía]");
+            } else {
+                while (!pilas[m].isEmpty()) {
+                    System.out.print(pilas[m].pop() + " ");
+                }
+            }
+            System.out.println(); // Salto de línea para la siguiente pila
+        }
+        
+        // Cierro el Scanner
+        teclado.close();
+    }
+}
