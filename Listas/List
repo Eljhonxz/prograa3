@@ -1,0 +1,181 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class HorarioDibujo {
+
+    public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);
+
+        // Lista de días y temas
+        // List es el tipo general (la idea de "lista")
+        // ArrayList es cómo se guarda por dentro
+        List<String> dias = new ArrayList<>();
+        List<String> temas = new ArrayList<>();
+
+        // Horario inicial
+        // Ojo: dias.get(i) y temas.get(i) siempre van juntos,
+        // por eso las dos listas deben tener el mismo tamaño
+        dias.add("Lunes");
+        temas.add("Brazos");
+
+        dias.add("Martes");
+        temas.add("Piernas");
+
+        dias.add("Miércoles");
+        temas.add("Pelvis, torso y glúteos");
+
+        dias.add("Jueves");
+        temas.add("Cabeza y rostros");
+
+        dias.add("Viernes");
+        temas.add("Todo combinado");
+
+        dias.add("Sábado");
+        temas.add("Color");
+
+        dias.add("Domingo");
+        temas.add("Personaje completo");
+
+        // Empieza en 0 para que el while entre la primera vez
+        int opcion = 0;
+
+        while (opcion != 5) {
+            System.out.println("\n=== HORARIO DE DIBUJO ===");
+            System.out.println("1. Ver horario");
+            System.out.println("2. Cambiar tema de un día");
+            System.out.println("3. Agregar un día nuevo");
+            System.out.println("4. Quitar un día");
+            System.out.println("5. Salir");
+            System.out.print("Elige una opción: ");
+
+            opcion = teclado.nextInt();
+
+            // Esto es para limpiar el Enter que deja nextInt()
+            // Si no lo pongo, el siguiente nextLine() lee vacío
+            teclado.nextLine();
+
+            switch (opcion) {
+
+                case 1:
+                    // Ver horario
+                    // isEmpty() es para no mostrar una lista vacía sin avisar
+                    if (dias.isEmpty()) {
+                        System.out.println("No hay días en el horario.");
+                    } else {
+                        System.out.println("\n--- HORARIO ---");
+
+                        // For con índice para poder mostrar el número (i + 1)
+                        // porque el usuario cuenta desde 1, pero la lista desde 0
+                        for (int i = 0; i < dias.size(); i++) {
+                            System.out.println((i + 1) + ". " + dias.get(i)
+                                               + " -> " + temas.get(i));
+                        }
+                    }
+                    break;
+
+                case 2:
+                    // Cambiar tema de un día
+                    if (dias.isEmpty()) {
+                        System.out.println("No hay días para cambiar.");
+                        break;  // Este break sale del switch, no del if
+                    }
+
+                    // Muestro los días para que el usuario sepa cuál elegir
+                    System.out.println("\nDías disponibles:");
+                    for (int i = 0; i < dias.size(); i++) {
+                        System.out.println((i + 1) + ". " + dias.get(i)
+                                           + " -> " + temas.get(i));
+                    }
+
+                    System.out.print("¿Qué día quieres cambiar? (número): ");
+                    int numDia = teclado.nextInt();
+                    teclado.nextLine();  // Limpio el Enter otra vez
+
+                    // Valido que el número esté dentro del rango
+                    // Si escribe 0 o 99, no entra
+                    if (numDia >= 1 && numDia <= dias.size()) {
+                        // Le resto 1 porque el usuario cuenta desde 1
+                        // y la lista empieza en 0
+                        int indice = numDia - 1;
+
+                        System.out.println("Día: " + dias.get(indice));
+                        System.out.println("Tema actual: " + temas.get(indice));
+                        System.out.print("Nuevo tema: ");
+                        String nuevoTema = teclado.nextLine();
+
+                        // set reemplaza el tema en esa posición
+                        // No agrega ni elimina, solo cambia
+                        temas.set(indice, nuevoTema);
+                        System.out.println("Tema actualizado.");
+                    } else {
+                        System.out.println("Número de día inválido.");
+                    }
+                    break;
+
+                case 3:
+                    // Agregar un día nuevo
+                    System.out.print("Nombre del día (ej: Lunes): ");
+                    String nuevoDia = teclado.nextLine();
+
+                    System.out.print("Tema de dibujo: ");
+                    String nuevoTemaDia = teclado.nextLine();
+
+                    // Agrego a las dos listas para que sigan iguales
+                    // Si solo agrego a una, se desincronizan
+                    dias.add(nuevoDia);
+                    temas.add(nuevoTemaDia);
+                    System.out.println(" Día agregado.");
+                    break;
+
+                case 4:
+                    // Quitar un día
+                    if (dias.isEmpty()) {
+                        System.out.println("No hay días para quitar.");
+                        break;
+                    }
+
+                    System.out.println("\nDías disponibles:");
+                    for (int i = 0; i < dias.size(); i++) {
+                        System.out.println((i + 1) + ". " + dias.get(i)
+                                           + " -> " + temas.get(i));
+                    }
+
+                    System.out.print("¿Qué día quieres quitar? (número): ");
+                    int numQuitar = teclado.nextInt();
+                    teclado.nextLine();
+
+                    if (numQuitar >= 1 && numQuitar <= dias.size()) {
+                        int indice = numQuitar - 1;
+
+                        // remove devuelve el elemento eliminado
+                        // Lo guardo para mostrarlo en el mensaje
+                        String diaEliminado = dias.remove(indice);
+
+                        // Ojo: elimino el tema en el MISMO índice
+                        // Si no lo hago, las listas quedan desincronizadas
+                        temas.remove(indice);
+
+                        System.out.println(" Eliminado: " + diaEliminado);
+                    } else {
+                        System.out.println(" Número de día inválido.");
+                    }
+                    break;
+
+                case 5:
+                    // Salir
+                    // No necesito cambiar opcion aquí
+                    // Al salir del switch, el while evalúa opcion != 5
+                    // Como opcion vale 5, el while termina solo
+                    System.out.println("Saliendo del horario...");
+                    break;
+
+                default:
+                    System.out.println("✗ Opción inválida.");
+                    break;
+            }
+        }
+
+        teclado.close();
+    }
+}
