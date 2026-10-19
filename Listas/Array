@@ -1,0 +1,161 @@
+package amuletos;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Amuletos { //clase
+    private String nombre;  //Atributs de objeto
+    private int numdemuescas;   //
+
+    public Amuletos(String nombre, int numdemuescas) {  //Constructor
+        this.nombre = nombre;   
+        this.numdemuescas = numdemuescas;
+    }
+
+public String getNombre() { //Metodo get observo el nombre y devuelvo nombre
+return nombre; }
+public int getNumdemuescas() { 
+return numdemuescas; }
+public void setNombre(String nombre) { //Metodo set para cambiar el nombre
+this.nombre = nombre; }
+public void mostrarAmuletosIniciales (){
+    System.out.print(nombre);    
+    System.out.println(numdemuescas);
+    
+}
+
+    public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);   //Teclado
+        ArrayList<Amuletos> amuletosEquipados = new ArrayList<>();  //Lista de arraylist
+
+        // 4 amuletos iniciales (fijos, ya creados)
+        amuletosEquipados.add(new Amuletos("Atrapa almas", 2)); //My build
+        amuletosEquipados.add(new Amuletos("Corte rápido", 3));
+        amuletosEquipados.add(new Amuletos("Fuerza irrompible", 3));
+        amuletosEquipados.add(new Amuletos("Piedra del chamán", 3));
+        
+        
+// Opcion del menu
+        int opcion = 0;
+//Menu para más amuletos y aprovechar los recursos del array
+        while (opcion != 5) {
+            System.out.println("=== AMULETOS ===");
+            System.out.println("1. Ver amuletos equipados");
+            System.out.println("2. Equipar amuleto");
+            System.out.println("3. Quitar amuleto");
+            System.out.println("4. Buscar amuleto");
+            System.out.println("5. Salir");
+            System.out.print("Elija una opción: ");
+            opcion = teclado.nextInt();
+            teclado.nextLine();   // Buffer
+
+            switch (opcion) {
+
+                case 1:
+                    // Calcular muescas usadas (se reinicia cada vez)
+                    int totalMuescas = 0;
+                    for (int i = 0; i < amuletosEquipados.size(); i++) {    //Metodo size del array
+                        Amuletos charm = amuletosEquipados.get(i);  // Obtiene el amuleto que esta en la posicion i y lo guarda en charm
+System.out.println((i + 1) + ". " + charm.getNombre() + " - " + charm.getNumdemuescas() + " muescas");
+totalMuescas += charm.getNumdemuescas();    //Obtengo el total de muescas usadas
+                    }
+                    System.out.println("Total: " + totalMuescas + "/11"); //El limite son 11
+                    break;
+
+                case 2:
+                    // Pedir datos al usuario
+                    //Para nuevos amuletos
+                    System.out.print("Nombre del amuleto: ");
+                    String nombre = teclado.nextLine(); //Nombre de nuevo amuleto
+//Numero de muescas
+                    System.out.print("Muescas: ");
+                    int muescas = teclado.nextInt();    //Muescas de nuevo amuleto
+                    teclado.nextLine();
+
+                    // Calcular muescas usadas ANTES de agregar
+                    int usadas = 0; //Variable para almacenar las muescas usadas
+                    for (int i = 0; i < amuletosEquipados.size(); i++) {
+                        usadas += amuletosEquipados.get(i).getNumdemuescas();   //El.getnumdemuescas son las muescas default que ya vienen por cada amuleto    
+                        //Obtengo el valor de las muescas usadas
+                    }
+
+                    // Validar límite de 11
+                    if (usadas + muescas <= 11) {
+                        amuletosEquipados.add(new Amuletos(nombre, muescas));   // Se agrega el amuleto porque aun hay muescas
+                        System.out.println("Equipado: " + nombre);
+                    } else {
+                        System.out.println("No cabe. Solo quedan " + (11 - usadas) + " muescas.");
+                    }
+                    break;
+
+                case 3:
+                    // QUITAR AMULETO POR NOMBRE
+                    // Estrategia: buscar la posición y luego remove(posicion)
+
+                    System.out.print("Nombre del amuleto a quitar: ");
+                    String aQuitar = teclado.nextLine();    //Variable para quitar el amuleto
+
+                    // posicion = -1 significa "aún no encontrado"
+                    // -1 nunca es índice válido (los índices van de 0 a size()-1)
+                    int posicion = -1;  // Posicion no valida o donde no estara el amuleto
+
+                    // Buscar el amuleto comparando nombres (sin importar mayúsculas)
+                    for (int i = 0; i < amuletosEquipados.size(); i++) {
+                        if (amuletosEquipados.get(i).getNombre().equalsIgnoreCase(aQuitar)) {
+                            posicion = i;   // lo encontré, guardo dónde está
+                            break;          // ya no sigo buscando
+                        }
+                    }
+
+                    // Si posicion cambió de -1, es porque SÍ lo encontré
+                    if (posicion != -1) {
+                        amuletosEquipados.remove(posicion);
+                        System.out.println(" Eliminado: " + aQuitar);
+                    } else {
+                        // Si sigue en -1, el for terminó sin encontrarlo
+                        System.out.println("No se encontró: " + aQuitar);
+                    }
+                    break;
+
+                case 4:
+                    // BUSCAR AMULETO POR NOMBRE
+                    // Estrategia: recorrer y mostrar si existe (sin quitarlo)
+
+                    System.out.print("Nombre a buscar: ");
+                    String aBuscar = teclado.nextLine();
+
+                    // encontrado = false significa "aún no lo he encontrado"
+                    // Es la misma idea que posicion = -1, pero con un boolean
+                    boolean encontrado = false; //Si no lo entontrado, porque si fuera true no tendria sentido
+
+                    for (int i = 0; i < amuletosEquipados.size(); i++) {
+                        if (amuletosEquipados.get(i).getNombre().equalsIgnoreCase(aBuscar)) {
+                            // Lo encontré: muestro su info
+                            System.out.println("Encontrado en posición " + (i + 1)
+                                               + ": " + amuletosEquipados.get(i).getNombre()
+                                               + " (" + amuletosEquipados.get(i).getNumdemuescas()
+                                               + " muescas)");
+                            encontrado = true;   // marco que sí lo encontré
+                            break;               // ya no sigo buscando
+                        }
+                    }
+
+                    // Si NUNCA se puso en true, es porque el for terminó sin encontrarlo
+                    if (!encontrado) {
+                        System.out.println("✗ No está en la lista.");
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("Saliendo...");
+                    break;
+
+                default:
+                    System.out.println("Opción inválida.");
+                    break;
+            }
+        }
+
+        teclado.close();
+    }
+}
