@@ -1,0 +1,42 @@
+/*Un grupo de amigos ha decidido iniciar una sociedad secreta. El nombre será la
+primera letra de cada nombre, ordenadas alfabéticamente.
+Crea una función que tome un arreglo de nombres y devuelva el nombre de la sociedad
+secreta
+*/
+package sociedad;
+
+import java.util.Arrays; // Importante para poder usar Arrays.sort()
+
+public class Sociedad{
+
+    public static String societyName(String[] nombres) {
+        
+        // 1. Creamos un arreglo de letras (char) del mismo tamaño que los nombres
+        char[] letras = new char[nombres.length];
+        
+        // 2. Recorremos el arreglo para sacar la primera letra de cada uno
+        for (int i = 0; i < nombres.length; i++) {
+            // nombres[i].charAt(0) saca la primera letra
+            // Character.toUpperCase la convierte a mayúscula
+            letras[i] = Character.toUpperCase(nombres[i].charAt(0));
+        }
+        
+        // 3. Ordenamos el arreglo de letras alfabéticamente (A, B, C...)
+        Arrays.sort(letras);
+        
+        // 4. Convertimos el arreglo de letras a un String de texto y lo devolvemos
+        return new String(letras);
+    }
+
+    public static void main(String[] args) {
+        
+        String[] prueba1 = {"Adam", "Sarah", "Malcolm"};
+        System.out.println(societyName(prueba1)); // Imprime: AMS
+
+        String[] prueba2 = {"Harry", "Newt", "Luna", "Cho"};
+        System.out.println(societyName(prueba2)); // Imprime: CHLN
+
+        String[] prueba3 = {"Phoebe", "Chandler", "Rachel", "Ross", "Monica", "Joey"};
+        System.out.println(societyName(prueba3)); // Imprime: CJMPRR
+    }
+}
