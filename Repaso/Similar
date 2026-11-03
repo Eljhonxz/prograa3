@@ -1,0 +1,39 @@
+/*
+Dado dos arreglos, que representan dos sándwiches, devuelve si ambos sándwiches
+usan el mismo tipo de pan. El pan siempre se encontrará al principio y al final del
+arreglo.
+
+booleano
+
+*/
+package similar;
+public class Similar {
+    //Metodo para comparar si tienen los mismos sandwiches
+public static boolean sameSandwich (String []s1 , String[]s2 ){
+      String panIs1 = s1[0];
+      String panFs1 = s1[s1.length-1];
+      
+      //Guardo los panes del s2
+      String panIs2 = s2[0];
+      String panFs2 = s2[s2.length-1];
+      
+      if(panIs1.equals(panIs2) && panFs1.equals(panFs2)){       //Es comparacion de ambos
+         return true;
+      }
+      else{
+     return false;
+      }
+    }
+
+    public static void main(String[] args) {
+        String []s1 = {"pan", "queso", "pan"};
+        String []s2 = {"pan" , "tomate" , "pan"};
+        String []s3 = {"pan", "tomatito" , "tostada"};
+        
+        
+        System.out.println("Lleva el mismo pan?: " + sameSandwich(s1, s2));  
+        System.out.println("Lleva el mismo pan?: " + sameSandwich(s1, s3));
+      
+  
+    }
+}
