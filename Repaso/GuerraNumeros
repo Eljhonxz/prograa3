@@ -1,0 +1,52 @@
+/*
+Hay una gran guerra entre los números pares e impares. Muchos números ya han
+perdido la vida en esta guerra y tu tarea es acabar con ella. Debes determinar qué
+grupo suma más: los pares o los impares. El grupo más grande gana.
+Crea una función que tome un arreglo de enteros, sume los números pares e impares
+por separado, y luego devuelva la diferencia entre la suma de los números pares e
+impares.
+*/
+package guerranumeros;
+
+public class GuerraNumeros {
+
+    public static int warOfNumbers(int[] numeros) {
+        
+        // 1. Creamos nuestras dos cajas (acumuladores)
+        int sumaPares = 0;
+        int sumaImpares = 0;
+
+        // 2. Recorremos el arreglo
+        for (int i = 0; i < numeros.length; i++) {
+            
+            // El símbolo % 2 == 0 significa "si el residuo de dividir entre 2 es 0"
+            // (O sea, si el número es par)
+            if (numeros[i] % 2 == 0) {
+                sumaPares += numeros[i];  // Lo sumamos a la caja de pares
+            } else {
+                sumaImpares += numeros[i]; // Si no es par, es impar
+            }
+        }
+
+        // 3. Calculamos la diferencia
+        // Math.abs() convierte el resultado en positivo por si acaso
+        int diferencia = Math.abs(sumaPares - sumaImpares);
+        
+        return diferencia;
+    }
+
+    public static void main(String[] args) {
+        
+        // Prueba 1: [2, 8, 7, 5] -> Pares (10) - Impares (12) = 2
+        int[] prueba1 = {2, 8, 7, 5};
+        System.out.println("Prueba 1: " + warOfNumbers(prueba1));
+        
+        // Prueba 2: [12, 90, 75] -> Pares (102) - Impares (75) = 27
+        int[] prueba2 = {12, 90, 75};
+        System.out.println("Prueba 2: " + warOfNumbers(prueba2));
+        
+        // Prueba 3: El arreglo largo de la imagen
+        int[] prueba3 = {5, 9, 45, 6, 2, 7, 34, 8, 6, 90, 5, 243};
+        System.out.println("Prueba 3: " + warOfNumbers(prueba3));
+    }
+}
