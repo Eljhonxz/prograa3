@@ -1,0 +1,48 @@
+/*
+Escribe una función que tome un arreglo de números y devuelva el segundo número
+más grande.
+*/
+package segundomayor;
+
+public class SegundoMayor {
+
+    public static int secondLargest(int[] numeros) {
+        
+        // Usamos Integer.MIN_VALUE, que es el número más pequeño que Java puede guardar.
+        // Lo usamos para asegurarnos de que cualquier número del arreglo sea más grande que esto.
+        int mayor = Integer.MIN_VALUE;
+        int segundoMayor = Integer.MIN_VALUE;
+
+        // Recorremos todo el arreglo
+        for (int i = 0; i < numeros.length; i++) {
+            
+            // Si el número actual es más grande que nuestro "mayor"...
+            if (numeros[i] > mayor) {
+                segundoMayor = mayor;  // El que era el mayor, baja a ser el segundo
+                mayor = numeros[i];    // El número actual se vuelve el nuevo mayor
+            } 
+            // Si no es más grande que el mayor, pero es más grande que el segundo...
+            // (Y además verificamos que no sea el mismo número para evitar duplicados)
+            else if (numeros[i] > segundoMayor && numeros[i] != mayor) {
+                segundoMayor = numeros[i]; // Se convierte en el nuevo segundo mayor
+            }
+        }
+
+        return segundoMayor;
+    }
+
+    public static void main(String[] args) {
+        
+        // Prueba 1: [10, 40, 30, 20, 50] -> El mayor es 50, el segundo es 40
+        int[] prueba1 = {10, 40, 30, 20, 50};
+        System.out.println("Prueba 1: " + secondLargest(prueba1)); 
+        
+        // Prueba 2: [25, 143, 89, 13, 105] -> El mayor es 143, el segundo es 105
+        int[] prueba2 = {25, 143, 89, 13, 105};
+        System.out.println("Prueba 2: " + secondLargest(prueba2)); 
+        
+        // Prueba 3: [54, 23, 11, 17, 10] -> El mayor es 54, el segundo es 23
+        int[] prueba3 = {54, 23, 11, 17, 10};
+        System.out.println("Prueba 3: " + secondLargest(prueba3)); 
+    }
+}
