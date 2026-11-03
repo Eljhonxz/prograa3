@@ -1,0 +1,32 @@
+/*
+Crea un método que tome un arreglo de 10 enteros (entre 0 y 9) y devuelva una cadena
+de esos números formateados como un número de teléfono (por ejemplo, (555) 555-
+5555)
+*/
+package telefono;
+
+public class Telefono {
+
+    // El método recibe el arreglo y devuelve un String (texto)
+    public static String formatPhoneNumber(int[] numeros) {
+        
+        // Pegamos todo usando el signo +
+        // Java convierte los números a texto automáticamente al mezclarlos con comillas
+        String resultado = "(" + numeros[0] + numeros[1] + numeros[2] + ") " 
+                         + numeros[3] + numeros[4] + numeros[5] + "-" 
+                         + numeros[6] + numeros[7] + numeros[8] + numeros[9];
+                         
+        return resultado;
+    }
+
+    public static void main(String[] args) {
+        
+        // Probamos con el primer ejemplo de la imagen
+        int[] arreglo = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+        
+        // Imprimimos lo que devuelve el método
+        System.out.println(formatPhoneNumber(arreglo)); 
+        // Imprimirá: (123) 456-7890
+        
+    }
+}
