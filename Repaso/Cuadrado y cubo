@@ -1,0 +1,36 @@
+/*
+Crea una función que tome un arreglo de dos números y verifique si la raíz cuadrada del
+primer número es igual a la raíz cúbica del segundo número.
+*/
+package cuadradocubo;
+
+public class CuadradoCubo {
+
+    // 1. Creamos la función que recibe el arreglo y devuelve true o false
+    public static boolean checkSquareAndCube(int[] numeros) {   //Parametro
+        
+        // numeros[0] es el primer número (ej: 4)
+        // numeros[1] es el segundo número (ej: 8)
+        
+        // Math.sqrt() saca la raíz cuadrada.
+        // Math.cbrt() saca la raíz cúbica.
+        
+        if (Math.sqrt(numeros[0]) == Math.cbrt(numeros[1])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 2. Lo probamos en el main
+    public static void main(String[] args) {
+        
+        // Probamos con un ejemplo
+        int[] miArreglo = {4, 8};
+        
+        // Llamamos a la función y mostramos el resultado (debería dar true)
+        System.out.println(checkSquareAndCube(miArreglo));
+        
+        
+    }
+}
