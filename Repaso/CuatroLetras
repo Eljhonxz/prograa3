@@ -1,0 +1,43 @@
+/*
+Crea una función que reciba un arreglo de cadenas y devuelva las palabras con cuatro
+letras o menos.
+*/
+package cuatroletras;
+
+import java.util.ArrayList;
+
+public class CuatroLetras {
+
+    public static ArrayList<String> isFourLetters(String[] palabras) {
+        
+        // 1. Creamos una lista vacía para guardar las que sí cumplen
+        ArrayList<String> resultado = new ArrayList<>();
+        
+        // 2. Recorremos el arreglo con un for normal
+        for (int i = 0; i < palabras.length; i++) {
+            
+            // 3. .length() nos dice cuántas letras tiene la palabra
+            if (palabras[i].length() <= 4) {
+                resultado.add(palabras[i]); // Si cumple, la agregamos
+            }
+        }
+        
+        // 4. Devolvemos la lista con las palabras encontradas
+        return resultado;
+    }
+
+    public static void main(String[] args) {
+        
+        String[] prueba1 = {"Tomate", "Papa", "Par"};
+        System.out.println(isFourLetters(prueba1)); 
+        // Imprimirá: [Papa, Par]
+        
+        String[] prueba2 = {"Canguro", "Oso", "Zorro"};
+        System.out.println(isFourLetters(prueba2)); 
+        // Imprimirá: [Oso]
+        
+        String[] prueba3 = {"Ryan", "Kieran", "Jason", "Matt"};
+        System.out.println(isFourLetters(prueba3)); 
+        // Imprimirá: [Ryan, Matt]
+    }
+}
