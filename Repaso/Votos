@@ -1,0 +1,55 @@
+/*
+Dado un arreglo que contiene el recuento de votos positivos y negativos, devuelve el
+recuento de votos que debe mostrarse. Se calcula restando el número de votos
+negativos de los positivos.
+*/
+package votos;
+
+public class Votos {
+
+  
+    public static void main(String[] args) {
+int votosP = 45;
+int votosN = 32;
+int [] vtosT = {votosP,votosN }; 
+
+int resVtos = (votosP - votosN);
+
+        System.out.print("Arreglo vtos { ");
+for (int i = 0; i < vtosT.length; i++) {
+    System.out.print(vtosT[i]);
+    
+    // Esto es para poner una coma entre los números, pero no al final
+    if (i < vtosT.length - 1) {
+        System.out.print(", ");
+    }
+}
+
+System.out.println(" }"); // Aquí sí usamos println para bajar de línea al terminar
+
+System.out.println("El resultado de votos es: " + resVtos);
+
+if(resVtos > 0 ){
+    System.out.println("Ganaron los votos a favor");
+}
+
+else if (resVtos < 0){
+    System.out.println("Ganaron los votos en contra");       
+    }
+
+else{
+    System.out.println("Es un empate");   
+}
+
+
+      
+            
+    
+
+        
+
+        
+        
+    }
+    
+}
